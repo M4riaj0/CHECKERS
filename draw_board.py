@@ -56,11 +56,11 @@ class Grid(turtle.RawTurtle):
 
 # Clase para manejar el tablero de ajedrez y las fichas
 class ChessBoard:
-    def __init__(self, screen):
+    def __init__(self, screen, pieces):
         self.screen = screen
+        self.pieces = pieces
         self.createChessBoard()
-        self.game = Game()
-        self.drawPieces(self.game.board.pieces)
+        self.drawPieces(self.pieces)
 
     # Función para crear el tablero de ajedrez
     def createChessBoard(self):
@@ -77,53 +77,56 @@ class ChessBoard:
 
     # Método para dibujar las fichas en el tablero
     def drawPieces(self, pieces):
+        self.createChessBoard()
         for piece in pieces:
-            x, y = self.convertPositionToCoords(piece.position)
-            if piece.captured:
-                continue  # No dibujar fichas capturadas
-            color = "blue" if piece.player == 1 else "red"  # Asignar color según el jugador
-            self.drawPawn(x, y, color, piece.king)
+            if not piece.captured:
+                x, y = self.convertPositionToCoords(piece.position)
+                color = "blue" if piece.player == 1 else "red"  # Asignar color según el jugador
+                self.drawPawn(x, y, piece.player, piece.king)
 
     # Método para convertir la posición de la ficha a coordenadas (x, y) en el tablero
     def convertPositionToCoords(self, position):
-        #positions can be 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 .... 32
         row = (position - 1) // 4
         col = ((position - 1) % 4) * 2 + 1 - (row % 2)
-        return col, row
-        
+        return col+ 0.5, row + 0.67
 
     # Método para dibujar una ficha en una posición específica del tablero
-    def drawPawn(self, x, y, color, isKing):
-        pixelX = x * Grid.gridSize
-        pixelY = y * Grid.gridSize
-        square = Grid(self.screen)
-        square.moveGrid(x, y)
-        square.colored = False  # Dibujar la ficha sobre el espacio vacío
-        square.draw()
-        pawn = turtle.Turtle()
+    def drawPawn(self, x, y, player, isKing):
+        pixelX = x * Grid.gridSize - (4 * Grid.gridSize)  # Ajuste de posición para centrar la ficha en el cuadrado
+        pixelY = y * Grid.gridSize - (4 * Grid.gridSize)  # Ajuste de posición para centrar la ficha en el cuadrado
+        pawn = turtle.Turtle()  # Usar la misma tortuga para dibujar la ficha en el cuadrado existente
         pawn.hideturtle()
         pawn.speed(0)
         pawn.width(3)
         pawn.up()
         pawn.goto(pixelX, pixelY - Grid.gridSize // 2)
-        if isKing:
-            pawn.color("red")
-            pawn.begin_fill()
-            pawn.circle(Grid.gridSize // 4)
-            pawn.end_fill()
-        pawn.color(color)
-        pawn.goto(pixelX, pixelY - Grid.gridSize // 3)
+        if(player == 1):
+            pawn.color((0,0,0),(1,0.5,0.5))
+        elif(player == 2):
+            pawn.color((0,0,0),(0.5,0.5,1))
+        else:
+            pawn.color((0,0,0),(1,0.5,1))
+        pawn.down()
         pawn.begin_fill()
-        pawn.circle(Grid.gridSize // 4)
+        pawn.circle(20,360,16)
         pawn.end_fill()
         pawn.up()
+
+        if isKing:
+            pawn.goto(pixelX, pixelY - Grid.gridSize*0.65 // 2)
+            pawn.color((0,0,0),(1,0.85,0))
+            pawn.down()
+            pawn.begin_fill()
+            pawn.circle( 10,360,16)
+            pawn.end_fill()
+            pawn.up()
 
 # Función principal
 def main():
     # Configurar la pantalla
     wn = turtle.Screen()
     wn.tracer(0, 0)
-    wn.title("Tablero de ajedrez")
+    wn.title("Checkers Game")
 
     # Crear el tablero de ajedrez y las fichas
     chess_board = ChessBoard(wn)
