@@ -18,6 +18,46 @@ def minimax(position, game, depth, max_player, player):
         return evaluate_board(position,player, player2), position
     
     if max_player:
-        max_eval = float('-inf')
+        maxEval = float('-inf')
+        best_move = None
+        for move in position.get_possible_moves():
+
+            evaluation = minimax(position.move(move), depth-1, False, game)[0]
+            maxEval = max(maxEval, evaluation)
+            if maxEval == evaluation:
+                best_move = move
+        
+        return maxEval, best_move
     else:
-        pass
+        minEval = float('inf')
+        best_move = None
+        for move in position.get_possible_moves():
+            evaluation = minimax(position.move(move), depth-1, True, game)[0]
+            minEval = min(minEval, evaluation)
+            if minEval == evaluation:
+                best_move = move
+        
+        return minEval, best_move
+
+def main():
+    game = Game()
+    counter = 0
+    for piece in game.board.pieces:
+        print("player", piece.player)
+        print("position piece::", piece.position)
+        counter += 1
+    print("counter", counter)
+    while not game.is_over():
+        print(game.board)
+        if game.whose_turn() == 1:
+            print("Player 1")
+            move = minimax(game, 2, game.whose_turn, game)
+        # else:
+        #     print("Player 2")
+        #     move = random_player(game.board)
+        game.move(move)
+        time.sleep(1)
+    print(game.get_winner())
+
+if __name__ == "__main__":
+    main()
