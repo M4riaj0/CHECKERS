@@ -2,7 +2,7 @@ import random
 from checkers.game import Game
 import time
 
-def minimax(game, depth, max_player, alpha, beta):
+def minimax_prune(game, depth, max_player, alpha, beta):
   global ct
   board = game.board
   if depth == 0 or game.is_over():
@@ -16,7 +16,7 @@ def minimax(game, depth, max_player, alpha, beta):
     for move in moves:
       board.push(move)
       ct += 1
-      current_eval, cur_move = minimax(board, depth-1, False, alpha, beta)
+      current_eval, cur_move = minimax_prune(board, depth-1, False, alpha, beta)
       board.pop()
       if current_eval > max_eval:
         max_eval = current_eval
@@ -30,7 +30,7 @@ def minimax(game, depth, max_player, alpha, beta):
     for move in moves:
       board.push(move)
       ct += 1
-      current_eval, cur_move = minimax(board, depth-1, True, alpha, beta)
+      current_eval, cur_move = minimax_prune(board, depth-1, True, alpha, beta)
       board.pop()
       if current_eval < min_eval:
         min_eval = current_eval
