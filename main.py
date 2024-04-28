@@ -4,7 +4,7 @@ from checkers.game import Game
 
 from draw_board import ChessBoard
 from Random.random_agent import random_player
-from Minimax import minimax_agent, minimax_agent_prune
+from Minimax import agent, agent_prune
 
 def main():
     game = Game()
@@ -30,7 +30,14 @@ def main():
          move = random_player(game.board)
         else:
             print("Player 2")
-            evaluation, move = minimax_agent.minimax(game,3, True, 2)
+            #evaluate time of minimax
+            start = time.time()
+            # evaluation, move = agent_prune.minimax_prune(game,5, float('-inf'), float('inf'), True, 2)
+            evaluation, move = agent.minimax(game,5, True, 2)
+            end = time.time()
+            print("start::", start, " - end::", end)
+            #time is in seconds
+            print("Time of minimax::", end-start)
             print("move from minimax::", move)
         game.move(move)
         chess_board.drawPieces(game.board.pieces)
