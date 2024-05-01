@@ -2,11 +2,12 @@ import random
 from checkers.game import Game
 from copy import deepcopy #With this we can copy the game object
 import time
+import sys
+import os
+sys.path.append(os.path.abspath(''))
+
 from evaluate_board import eval
 
-# Position is the current position that we are in, is a board object
-# depht is the number of moves that we are going to look ahead
-# max_player is a boolean that is true if we are the maximizing player and false if we are the minimizing player
 def minimax_prune(position,depth,alpha, beta ,max_player, player):
     if depth == 0 or position.get_winner() != None:
         player2 = 2 if player == 1 else 1
@@ -32,7 +33,7 @@ def minimax_prune(position,depth,alpha, beta ,max_player, player):
             minEval = min(minEval, evaluation)
             if minEval == evaluation:
                 best_move = move[1]
-            beta = min(alpha, minEval)
+            beta = min(beta, minEval)
             if beta <= alpha:
               break
         return minEval, best_move
