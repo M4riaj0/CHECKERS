@@ -62,15 +62,21 @@ class QlearningAgent:
     
     #train the agent with minimax
     def train_with_minimax(self, depth, num_episodes):
+        print("training with minimax")
         counter = 0
+        try:
+            self.load_q_values("q_values.npy")
+            print("Loaded Q values from file.")
+        except:
+            print("No previous Q values found. Starting from scratch.")
         for _ in range(num_episodes):
             game = Game()
             state = game.board.searcher.player_positions
             state = tuple(tuple(vals) for vals in state.values())
             print("counter", counter)
             counter += 1
-            
-            while not game.is_over() and game.get_winner() != None:
+
+            while not game.is_over() and game.get_winner() == None:
                 if game.whose_turn() == 1 :
                     action = self.get_action(game.board, state)
                 else:
@@ -123,10 +129,11 @@ class QlearningAgent:
         return game.get_winner()
     
     def play_against_minimax(self, game, depth):
-        state = game.board
-        while not game.is_over():
+        state = game.board.searcher.player_positions
+        state = tuple(tuple(vals) for vals in state.values())
+        while not game.is_over() and game.get_winner() == None:
             if game.whose_turn() == 1:
-                action = self.get_best_action(state)
+                action = self.get_best_action(game.board, state)
             else:
                 evaluation, action = agent_prune.minimax_prune(game, depth, float('-inf'), float('inf'), True, 2)
             game.move(list(action))
@@ -155,16 +162,17 @@ class QlearningAgent:
     
 
 
-def main():
+if __name__ == "__main__":
     game = Game()
 
     agent = QlearningAgent(0.5, 0.1, 0.9, lambda board: board.get_possible_moves())
     print("Training agent...", agent)
-    agent.train_with_minimax( 5, 100)
-    win_rate = agent.calculate_win_rate(game, 100)
+    agent.train_with_minimax(5, 1000)  # Llama a la función de entrenamiento
+    print("training has finished")
+    win_rate = agent.calculate_win_rate(game, 1000)
     print("Win rate against Minimax:", win_rate)
-    agent.save_q_values("q_values.npy")
+    # agent.save_q_values("q_values.npy")
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
     

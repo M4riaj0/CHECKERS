@@ -56,9 +56,9 @@ def run_game():
 
 # Función para ejecutar múltiples juegos y calcular estadísticas
 def run_multiple_games(max_num_games):
-    win_counts_player1 = []
-    win_counts_player2 = []
-    draw_counts = []
+    win_percentages_player1 = []
+    win_percentages_player2 = []
+    draw_percentages = []
     
     # Ejecutar los juegos para cada cantidad de juegos en el rango especificado
     for num_games in range(10, max_num_games + 1, 10):
@@ -76,19 +76,23 @@ def run_multiple_games(max_num_games):
             else:
                 total_draws += 1
         
-        # Almacenar los resultados en listas
-        win_counts_player1.append(total_wins_player1)
-        win_counts_player2.append(total_wins_player2)
-        draw_counts.append(total_draws)
+        # Calcular los porcentajes
+        win_percentage_player1 = (total_wins_player1 / num_games) * 100
+        win_percentage_player2 = (total_wins_player2 / num_games) * 100
+        draw_percentage = (total_draws / num_games) * 100
+        
+        # Almacenar los porcentajes en listas
+        win_percentages_player1.append(win_percentage_player1)
+        win_percentages_player2.append(win_percentage_player2)
+        draw_percentages.append(draw_percentage)
     
-    return win_counts_player1, win_counts_player2, draw_counts
+    return win_percentages_player1, win_percentages_player2, draw_percentages
 
 
-# Función para dibujar el desempeño de los jugadores de manera lineal
 def draw_performance_chart(max_num_games, win_percentages_player1, win_percentages_player2, draw_percentages):
     num_games_list = list(range(10, max_num_games + 1, 10))
-    plt.plot(num_games_list, win_percentages_player1, label='Player 1 Wins')
-    plt.plot(num_games_list, win_percentages_player2, label='Player 2 Wins')
+    plt.plot(num_games_list, win_percentages_player1, label='Minimax Wins')
+    plt.plot(num_games_list, win_percentages_player2, label='Random Wins')
     plt.plot(num_games_list, draw_percentages, label='Draws')
     plt.xlabel('Number of Games')
     plt.ylabel('Percentage')
@@ -96,15 +100,15 @@ def draw_performance_chart(max_num_games, win_percentages_player1, win_percentag
     plt.legend()
     plt.show()
 
-# Función principal
 def main():
-    max_num_games = 20  # Número máximo de juegos a jugar
+    max_num_games = 50  # Número máximo de juegos a jugar
     
     # Ejecutar los juegos y calcular estadísticas
     win_percentages_player1, win_percentages_player2, draw_percentages = run_multiple_games(max_num_games)
-    print("Player 1 Win Percentages:", win_percentages_player1, "\n", "Player 2 Win Percentages:", win_percentages_player2, "\n", "Draw Percentages:", draw_percentages)
+    
     # Mostrar resultados y graficar
     draw_performance_chart(max_num_games, win_percentages_player1, win_percentages_player2, draw_percentages)
 
 if __name__ == "__main__":
     main()
+
