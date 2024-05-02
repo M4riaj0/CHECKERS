@@ -23,16 +23,16 @@ def run_game():
             # move = random_player(game)
 
             # move for q_agent
-            state = game.board.searcher.player_positions
-            state = tuple(tuple(vals) for vals in state.values())
-            move = q_agent.get_action(game.board, state)
-            move = list(move)
+            # state = game.board.searcher.player_positions
+            # state = tuple(tuple(vals) for vals in state.values())
+            # move = q_agent.get_action(game.board, state)
+            # move = list(move)
 
             # move for minimax with alpha beta pruning
             # _, move = agent_prune.minimax_prune(game,5, float('-inf'), float('inf'), True, 1)
             # print("move from minimax::", move)
             # move for minimax 
-            # _, move = agent.minimax(game,3, True, 2)
+            _, move = agent.minimax(game,3, True, 1)
 
             end_time = time.time()
             player1_time += end_time - start_time
@@ -94,7 +94,7 @@ def run_multiple_games(max_num_games):
 # Función para dibujar el desempeño de los jugadores de manera lineal
 def draw_performance_chart(max_num_games, win_percentages_player1, win_percentages_player2, draw_percentages):
     num_games_list = list(range(10, max_num_games + 1, 10))
-    plt.plot(num_games_list, win_percentages_player1, label='q_agent Wins')
+    plt.plot(num_games_list, win_percentages_player1, label='minimax Wins')
     plt.plot(num_games_list, win_percentages_player2, label='minimax_prune Wins')
     plt.plot(num_games_list, draw_percentages, label='Draws')
     plt.xlabel('Number of Games')

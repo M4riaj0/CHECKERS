@@ -20,7 +20,7 @@ def run_game():
         if game.whose_turn() == 1:
             start_time = time.time()
             # move for random player
-            # move = random_player(game)
+            move = random_player(game)
 
             # move for q_agent
             # state = game.board.searcher.player_positions
@@ -29,7 +29,7 @@ def run_game():
             # move = list(move)
 
             # move for minimax with alpha beta pruning
-            _, move = agent_prune.minimax_prune(game,5, float('-inf'), float('inf'), True, 1)
+            # _, move = agent_prune.minimax_prune(game,5, float('-inf'), float('inf'), True, 1)
             # print("move from minimax::", move)
             # move for minimax 
             # _, move = agent.minimax(game,3, True, 2)
@@ -39,10 +39,10 @@ def run_game():
         else:
             start_time = time.time()
             # move for random player
-            move = random_player(game)
+            # move = random_player(game)
             # print("move from random::", move)
             # move for minimax with alpha beta pruning
-            # _, move = agent_prune.minimax_prune(game,5, float('-inf'), float('inf'), True, 2)
+            _, move = agent_prune.minimax_prune(game,5, float('-inf'), float('inf'), True, 2)
 
             # move for minimax 
             # _, move = agent.minimax(game,3, True, 2)
@@ -80,6 +80,7 @@ def run_multiple_games(max_num_games):
         win_percentage_player1 = (total_wins_player1 / num_games) * 100
         win_percentage_player2 = (total_wins_player2 / num_games) * 100
         draw_percentage = (total_draws / num_games) * 100
+        print("total_wins_q_agent", total_wins_player1, "total_wins_minimax_prune", total_wins_player2, "total_draws", total_draws)
         
         # Almacenar los porcentajes en listas
         win_percentages_player1.append(win_percentage_player1)
@@ -91,8 +92,8 @@ def run_multiple_games(max_num_games):
 
 def draw_performance_chart(max_num_games, win_percentages_player1, win_percentages_player2, draw_percentages):
     num_games_list = list(range(10, max_num_games + 1, 10))
-    plt.plot(num_games_list, win_percentages_player1, label='Minimax Wins')
-    plt.plot(num_games_list, win_percentages_player2, label='Random Wins')
+    plt.plot(num_games_list, win_percentages_player1, label='Random Wins')
+    plt.plot(num_games_list, win_percentages_player2, label='minimax poda Wins')
     plt.plot(num_games_list, draw_percentages, label='Draws')
     plt.xlabel('Number of Games')
     plt.ylabel('Percentage')

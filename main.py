@@ -2,7 +2,7 @@ import turtle
 import time
 from checkers.game import Game
 
-from draw_board import ChessBoard
+from draw_board import ChessBoard, person_play
 from Random.random_agent import random_player
 from Minimax import agent, agent_prune
 from Qlearning.q_agent import QlearningAgent
@@ -31,10 +31,11 @@ def main():
         print("state::", state)
         if game.whose_turn() == 1:
          print("Player 1")
-         state = game.board.searcher.player_positions
-         state = tuple(tuple(vals) for vals in state.values())
-         move = q_agent.get_action(game.board, state)
-         move = list(move)
+         move = person_play(game, chess_board, wn)
+        #  state = game.board.searcher.player_positions
+        #  state = tuple(tuple(vals) for vals in state.values())
+        #  move = q_agent.get_action(game.board, state)
+        #  move = list(move)
         #  move = random_player(game.board)
         else:
             print("Player 2")
