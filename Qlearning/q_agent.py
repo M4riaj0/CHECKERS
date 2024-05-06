@@ -106,7 +106,7 @@ class QlearningAgent:
                 reward = 0 if not game.is_over() else 1
                 self.update(state, action, reward, next_state)
                 state = next_state
-        np.save("q_values.npy", self.q_values)
+            np.save("q_values.npy", self.q_values)
     
 
     def play(self, game):
@@ -165,12 +165,14 @@ class QlearningAgent:
 if __name__ == "__main__":
     game = Game()
 
-    agent = QlearningAgent(0.5, 0.1, 0.9, lambda board: board.get_possible_moves())
-    print("Training agent...", agent)
-    agent.train_with_minimax(5, 1000)  # Llama a la función de entrenamiento
+    agent = QlearningAgent(0.5, 0.3, 0.9, lambda board: board.get_possible_moves())
+    # print("Training agent...", agent)
+    # agent.train_with_minimax(5, 50000)  # Llama a la función de entrenamiento
     print("training has finished")
-    win_rate = agent.calculate_win_rate(game, 1000)
-    print("Win rate against Minimax:", win_rate)
+    # win_rate = agent.calculate_win_rate(game, 50)
+    # print("Win rate against Minimax:", win_rate)
+    agent.load_q_values
+    print("q_values:::", agent.q_values)
     # agent.save_q_values("q_values.npy")
 
 # if __name__ == "__main__":
