@@ -9,7 +9,7 @@ import random
 import time
 
 def run_game():
-    q_agent = QlearningAgent(0.5, 0.3, 0.9, lambda board: board.get_possible_moves())
+    q_agent = QlearningAgent(0.5, 0.1, 0.9, lambda board: board.get_possible_moves())
     game = Game()
     print("game has started")
     player1_time = 0
@@ -20,13 +20,13 @@ def run_game():
         if game.whose_turn() == 1:
             start_time = time.time()
             # move for random player
-            # move = random_player(game)
+            move = random_player(game)
 
             # move for q_agent
-            state = game.board.searcher.player_positions
-            state = tuple(tuple(vals) for vals in state.values())
-            move = q_agent.get_action(game.board, state)
-            move = list(move)
+            # state = game.board.searcher.player_positions
+            # state = tuple(tuple(vals) for vals in state.values())
+            # move = q_agent.get_action(game.board, state)
+            # move = list(move)
 
             # move for minimax with alpha beta pruning
             # _, move = agent_prune.minimax_prune(game,5, float('-inf'), float('inf'), True, 1)
@@ -39,10 +39,10 @@ def run_game():
         else:
             start_time = time.time()
             # move for random player
-            move = random_player(game)
+            # move = random_player(game)
             # print("move from random::", move)
             # move for minimax with alpha beta pruning
-            # _, move = agent_prune.minimax_prune(game,3, float('-inf'), float('inf'), True, 2)
+            _, move = agent_prune.minimax_prune(game,3, float('-inf'), float('inf'), True, 2)
 
             # move for minimax 
             # _, move = agent.minimax(game,3, True, 2)
@@ -80,7 +80,7 @@ def run_multiple_games(max_num_games):
         win_percentage_player1 = (total_wins_player1 / num_games) * 100
         win_percentage_player2 = (total_wins_player2 / num_games) * 100
         draw_percentage = (total_draws / num_games) * 100
-        print("total_Qagent", total_wins_player1, "total_Random", total_wins_player2, "total_draws", total_draws)
+        print("total_Random", total_wins_player1, "total_minimax_prune", total_wins_player2, "total_draws", total_draws)
         
         # Almacenar los porcentajes en listas
         win_percentages_player1.append(win_percentage_player1)
@@ -92,8 +92,8 @@ def run_multiple_games(max_num_games):
 
 def draw_performance_chart(max_num_games, win_percentages_player1, win_percentages_player2, draw_percentages):
     num_games_list = list(range(10, max_num_games + 1, 10))
-    plt.plot(num_games_list, win_percentages_player1, label='Qagent Wins')
-    plt.plot(num_games_list, win_percentages_player2, label='Random Wins')
+    plt.plot(num_games_list, win_percentages_player1, label='Random Wins')
+    plt.plot(num_games_list, win_percentages_player2, label='Minimax Prune Wins')
     plt.plot(num_games_list, draw_percentages, label='Draws')
     plt.xlabel('Number of Games')
     plt.ylabel('Percentage')
